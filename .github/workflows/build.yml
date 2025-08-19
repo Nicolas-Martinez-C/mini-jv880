@@ -11,8 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repository (with submodules)
         uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Confirm needed header exists
+        run: |
+          if [ ! -f circle/usb/usbkompletekontrol.h ]; then
+            echo "ERROR: circle/usb/usbkompletekontrol.h is missing. Please ensure it is present in the repo or submodules."
+            exit 1
+          fi
 
       - name: Get specific commits of git submodules
         run: sh -ex ./submod.sh
